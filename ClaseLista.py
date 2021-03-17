@@ -204,3 +204,47 @@ class ListaImagenes():
             
             tmp = NodoImagen(nombre, filas, columnas, img)
             aux.setSiguiente(tmp)
+    
+    def muestraNombres(self):
+        aux = self.inicio
+        while True:
+            print(" >>", aux.getNombre())
+            if aux.getSiguiente() != None:
+                aux = aux.getSiguiente()
+            else:
+                break
+
+    def existeNombre(self, nombre):
+        aux = self.inicio
+        while True:
+            if aux.getNombre() == nombre:
+                return True
+            if aux.getSiguiente() != None:
+                aux = aux.getSiguiente()
+            else:
+                break
+        return False
+
+    def getNodeByName(self, nombre):
+        aux = self.inicio
+        while True:
+            if aux.getNombre() == nombre:
+                return aux
+            if aux.getSiguiente() != None:
+                aux = aux.getSiguiente()
+            else:
+                break
+    
+    def setImgNodeByName(self, nombre, pos):
+        aux = self.inicio
+        while True:
+            if aux.getNombre() == nombre:
+                if pos == "h" or pos == "v":
+                    aux.getImagen().rotaImagen(pos)
+                else:
+                    aux.getImagen().rotaImagen("v")
+                    aux.getImagen().rotaImagen(pos)
+            if aux.getSiguiente() != None:
+                aux = aux.getSiguiente()
+            else:
+                break

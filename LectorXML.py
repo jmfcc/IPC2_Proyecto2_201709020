@@ -1,8 +1,7 @@
 from xml.dom import minidom
-#import os
 import time
-#import manejador
 from ClaseLista import imagen
+import manejador
 
 def leerxml(ruta, nArchivo): 
     print(" >>> Obteniendo archivo de ", ruta)
@@ -13,7 +12,6 @@ def leerxml(ruta, nArchivo):
         for matriz in matrix.getElementsByTagName("matriz"):
             taBien = True
             nombre = matriz.getElementsByTagName("nombre")[0].firstChild.data
-
             # Validar nombre
             if validaNombre(nombre):
                 print(" >>> Error: Se encontró una matriz con el nombre " + nombre)
@@ -24,9 +22,8 @@ def leerxml(ruta, nArchivo):
                     columnas = int(matriz.getElementsByTagName("columnas")[0].firstChild.data)
                     img = matriz.getElementsByTagName("imagen")[0].firstChild.data
                     img = img.replace(" ","")
-                    print("Nombre:",nombre, " Filas:", filas, " Cols:", columnas)
-                    print("Imagen:")
-                    #print()
+                    #print("Nombre:",nombre, " Filas:", filas, " Cols:", columnas)
+                    #print("Imagen:")
                     cont = 0
                     contF = 0
                     for char in img:
@@ -74,29 +71,30 @@ def leerxml(ruta, nArchivo):
                                 else:
                                     img_tmp.agregaNodo(char, esNueva)
                                 cont += 1
-                        img_tmp.muestraLista()
-                        print("Imagen con rotación Horizontal:")
-                        img_tmp.rotaImagen("h")
-                        img_tmp.muestraLista()
-                        print("Imagen con rotación Vertical:")
-                        img_tmp.rotaImagen("h")
-                        img_tmp.rotaImagen("v")
-                        img_tmp.muestraLista()
-                        print("Imagen transpuesta:")
-                        img_tmp.rotaImagen("t")
-                        img_tmp.muestraLista()
+                        manejador.agregaImagen(nombre, filas, columnas, img_tmp)
                 except:
                     print(" >>> Error: Se ha detectado un valor no numérico en el atributo tamaño")
-                    #break
-
     time.sleep(1)
 
 def validaNombre(nombre):
-#     lista = manejador.getLista()
-#     if not lista.estaVacia():
-#         return lista.existeNombre(nombre)
+    lista = manejador.getLista()
+    if not lista.estaVacia():
+        return lista.existeNombre(nombre)
     return False
    
-
-leerxml("C:/Users/Jaime/Documents/DEVELOP/PYTHON/2021_1S/IPC2_Proyecto2_201709020/entrada.xml", "Entrada.xml")
+#leerxml("C:/Users/Jaime/Documents/DEVELOP/PYTHON/2021_1S/IPC2_Proyecto2_201709020/entrada.xml", "Entrada.xml")
 # leerxml()
+
+# img_tmp.muestraLista()
+# grafo(nombre, filas, columnas, img_tmp, "Original")
+# print("Imagen con rotación Horizontal:")
+# img_tmp.rotaImagen("h")
+# img_tmp.muestraLista()
+# grafo(nombre, filas, columnas, img_tmp, "Modif")
+# print("Imagen con rotación Vertical:")
+# img_tmp.rotaImagen("h")
+# img_tmp.rotaImagen("v")
+# img_tmp.muestraLista()
+# print("Imagen transpuesta:")
+# img_tmp.rotaImagen("t")
+# img_tmp.muestraLista()
