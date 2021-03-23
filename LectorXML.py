@@ -3,6 +3,7 @@ import time
 from ClaseLista import imagen
 import manejador
 
+
 def leerxml(ruta, nArchivo): 
     print(" >>> Obteniendo archivo de ", ruta)
     time.sleep(0.6)
@@ -14,7 +15,7 @@ def leerxml(ruta, nArchivo):
             nombre = matriz.getElementsByTagName("nombre")[0].firstChild.data
             # Validar nombre
             if validaNombre(nombre):
-                print(" >>> Error: Se encontró una matriz con el nombre " + nombre)
+                print(" >>> Error: Se encontró una imagen existente con el nombre " + nombre)
                 #break
             else:
                 try:
@@ -23,7 +24,6 @@ def leerxml(ruta, nArchivo):
                     img = matriz.getElementsByTagName("imagen")[0].firstChild.data
                     img = img.replace(" ","")
                     #print("Nombre:",nombre, " Filas:", filas, " Cols:", columnas)
-                    #print("Imagen:")
                     cont = 0
                     contF = 0
                     for char in img:
@@ -64,17 +64,22 @@ def leerxml(ruta, nArchivo):
                                 else:
                                     esNueva = True
                                     cont = 0
+                                #print("Linea")
                             else:
                                 if esNueva:
+                                    cont += 1
                                     img_tmp.agregaNodo(char, esNueva)
                                     esNueva = False
                                 else:
+                                    cont += 1
                                     img_tmp.agregaNodo(char, esNueva)
                                 cont += 1
                         manejador.agregaImagen(nombre, filas, columnas, img_tmp)
+                        print(" >>> Imagen:", nombre, " almacenada correctamente")
                 except:
                     print(" >>> Error: Se ha detectado un valor no numérico en el atributo tamaño")
     time.sleep(1)
+    return
 
 def validaNombre(nombre):
     lista = manejador.getLista()
