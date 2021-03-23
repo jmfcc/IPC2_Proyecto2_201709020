@@ -182,6 +182,10 @@ class NodoImagen():
     def setSiguiente(self, siguiente):
         self.siguiente = siguiente
     
+    def redimensionaImg(self):
+        tmp = self.filas
+        self.filas = self.columnas
+        self.columnas = tmp
 class ListaImagenes():
 
     def __init__(self):
@@ -205,14 +209,28 @@ class ListaImagenes():
             tmp = NodoImagen(nombre, filas, columnas, img)
             aux.setSiguiente(tmp)
     
-    def muestraNombres(self):
-        aux = self.inicio
-        while True:
-            print(" >>", aux.getNombre())
-            if aux.getSiguiente() != None:
-                aux = aux.getSiguiente()
-            else:
-                break
+    def getNombres(self):
+        elem_comboBox = []
+        if self.estaVacia():
+            return elem_comboBox
+        else:
+            aux = self.inicio
+            while True:
+                elem_comboBox.append(aux.getNombre())
+                if aux.getSiguiente() != None:
+                    aux = aux.getSiguiente()
+                else:
+                    break
+            return elem_comboBox
+
+    # def muestraNombres(self):
+    #     aux = self.inicio
+    #     while True:
+    #         print(" >>", aux.getNombre())
+    #         if aux.getSiguiente() != None:
+    #             aux = aux.getSiguiente()
+    #         else:
+    #             break
 
     def existeNombre(self, nombre):
         aux = self.inicio
@@ -244,6 +262,7 @@ class ListaImagenes():
                 else:
                     aux.getImagen().rotaImagen("v")
                     aux.getImagen().rotaImagen(pos)
+                    aux.redimensionaImg()
             if aux.getSiguiente() != None:
                 aux = aux.getSiguiente()
             else:
