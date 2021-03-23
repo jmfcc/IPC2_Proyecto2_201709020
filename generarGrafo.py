@@ -7,6 +7,17 @@ def getsource():
     #print("lo que obtengo ",ruta)
     return ruta
 
+def generagraf(nombre):
+    di = "dot -Tpng " +  nombre + ".dot -o " + nombre + "-grafo.png"
+    #print(di)
+    mimetodo(di)
+    # openGraf(nombre)
+    
+def escrituranorm(log, nombre):
+    file = open(nombre + ".dot", "a")
+    file. write(log + "\n")
+    file. close()
+
 def mimetodo(di):
     try:
         time.sleep(2)
@@ -17,7 +28,7 @@ def mimetodo(di):
     
 def grafo(nombreM, filas, columnas, matriz, tipo):
     ruta = getsource()
-    nombre = ruta + "\\DiagramaMatriz" + tipo
+    nombre = ruta + "\\img_" + tipo
     file = open(nombre + ".dot", "w")
     file.close()
     
@@ -80,22 +91,11 @@ def grafo(nombreM, filas, columnas, matriz, tipo):
     
     generagraf(nombre)
     
-def generagraf(nombre):
-    di = "dot -Tpng " +  nombre + ".dot -o " + nombre + "-grafo.png"
-    #print(di)
-    mimetodo(di)
-    openGraf(nombre)
 
-    
-def escrituranorm(log, nombre):
-    file = open(nombre + ".dot", "a")
-    file. write(log + "\n")
-    file. close()
-
-def openGraf(name):
-    di = "start " + name + "-grafo.png"
-    try:
-        time.sleep(2)
-        system (di)
-    except:
-        print("Error al abrir grafo")
+# def openGraf(name):
+#     di = "start " + name + "-grafo.png"
+#     try:
+#         time.sleep(2)
+#         system (di)
+#     except:
+#         print("Error al abrir grafo")
