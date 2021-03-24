@@ -29,19 +29,6 @@ def dameReduccion(dim1, dim2):
 ventana = tk.Tk()
 ventana.title("Proyecto 2 - IPC2")
 ventana.geometry("1160x640") #tamaño ventana
-# mygreen = "#d2ffd2"
-# myred = "#dd0202"
-
-# style = ttk.Style()
-
-# style.theme_create( "yummy", parent="alt", settings={
-#         "TNotebook": {"configure": {"tabmargins": [2, 5, 2, 0] } },
-#         "TNotebook.Tab": {
-#             "configure": {"padding": [5, 1], "background": mygreen },
-#             "map":       {"background": [("selected", myred)],
-#                           "expand": [("selected", [1, 1, 1, 0])] } } } )
-
-# style.theme_use("yummy")
 
 tabs = ttk.Notebook(ventana)
 
@@ -70,6 +57,7 @@ opr_cmbx2 = ttk.Combobox(oprtsn, state="readonly")
 def muestraOriginal():
     sel2 = opr_cmbx2.get()
     if sel2:
+        manejador.generaImagenO(sel2)
         img3 = tk.PhotoImage(file="PYTHON\\2021_1S\\IPC2_Proyecto2_201709020\\img_original-grafo.png")
         reduc = dameReduccion(img3.height(),img3.width())
         #print("REDUCCION ----------------------------------", reduc)
@@ -266,10 +254,39 @@ opredit_cmbx = ttk.Combobox(opredit,  width=10, state="readonly")
 opredit_cmbx.bind("<<ComboboxSelected>>", habilitaEdit)
 # opredit_cmbx["values"]=["Rot. Horizontal", "Rot. Vertical", "Transpuesta"]
 
+def editaImagen():                  #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    modoEdicion = opredit_cmbx2.get()
+    sel1 = opredit_cmbx.get() #Img
+    sel2 = opredit_cmbx2.get()#Tipo-Edicion
+    if sel1 and sel2:
+        sel3 = opredit_cmbx3.get()#F1
+        sel4 = opredit_cmbx4.get()#F2
+        sel5 = opredit_cmbx5.get()#C1
+        sel6 = opredit_cmbx6.get()#C2
+        if modoEdicion == "Limpiar área":
+            if sel3 and sel4 and sel5 and sel6:
+                # (sel1, sel2,sel3, sel4, sel5, sel6)
+                print("Img:",sel1, " Oprc:", sel2, " F_i:", sel3, " F_f:", sel4, " C_i:", sel5, " C_f:", sel6)
+        elif modoEdicion == "Linea Horiz.":
+            if sel3 and sel5 and sel6:
+                # (sel1, sel2, sel3, sel5, sel6)
+                print("Img:",sel1, " Oprc:", sel2, " F:", sel3, " C_i:", sel5, " C_f:", sel6)
+        elif modoEdicion == "Linea Vert.":
+            if sel3 and sel4 and sel5:
+                # (sel1, sel2, sel3, sel4, sel5)
+                print("Img:",sel1, " Oprc:", sel2, " F_i:", sel3, " F_f:", sel4, " C:", sel5)
+        elif modoEdicion == "Rectángulo":
+            if sel3 and sel4 and sel5 and sel6:
+                # (sel1, sel2, sel3, sel4, sel5, sel6)
+                print("Img:",sel1, " Oprc:", sel2, " F:", sel3, " Alt:", sel4, " C:", sel5, " Anch:", sel6)
+        elif modoEdicion == "Triángulo":
+            if sel3 and sel5 and sel6:
+                # (sel1, sel2, sel3, sel5, sel6)
+                print("Img:",sel1, " Oprc:", sel2, " F:", sel3, " C:", sel5, " Tam:", sel6)
 
 
 opredit_btn2 = ttk.Button(opredit, text = "Recargar", width=13, command=None, state=tk.DISABLED)
-opredit_btn = ttk.Button(opredit, text = "Visualizar", width=13, command=None)
+opredit_btn = ttk.Button(opredit, text = "Realizar Edición", width=13, command=editaImagen)
 
 def defaultOpEd1():
     opredit_cmbx2.set("")
