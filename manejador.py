@@ -18,6 +18,21 @@ def listaImagenes():
     global biblioteca
     return biblioteca.getNombres()
 
+def operationEdit(nombre, tipo, params):
+    global biblioteca
+    nodoMatriz = biblioteca.getNodeByName(nombre)
+    if tipo == "Limpiar área":
+        nodoMatriz.getImagen().limpiaArea(params[0], params[1], params[2], params[3])
+    elif tipo == "Linea Horiz.":
+        nodoMatriz.getImagen().lineaHoriz(params[0], params[1], params[2])
+    elif tipo == "Linea Vert.":
+        nodoMatriz.getImagen().lineaVerti(params[0], params[1], params[2])
+    elif tipo == "Rectángulo":
+        nodoMatriz.getImagen().rectangulo(params[0], params[1], params[2], params[3])
+    elif tipo == "Triángulo":
+        nodoMatriz.getImagen().triangulo(params[0], params[1], params[2])
+    grafo(nodoMatriz.getNombre(), nodoMatriz.getFilas(), nodoMatriz.getColumnas(), nodoMatriz.getImagen(), "modificada")
+
 def tamanioImagen(nombre):
     nodoMatriz = biblioteca.getNodeByName(nombre)
     dimensiones = [nodoMatriz.getFilas(), nodoMatriz.getColumnas()]
@@ -40,18 +55,13 @@ def cargarArchivo(ruta):
     else:
         print(" >>> El archivo no es de extensión XML")
     
-def generaImagen(seleccion, tipo):
+def generaImagenMod(seleccion, tipo):
     global biblioteca
-    # biblioteca.muestraNombres()
-    # seleccion = input(" >>> Ingresa el nombre de la matriz para generar su grafo: ")
     if seleccion:
         if biblioteca.existeNombre(seleccion):
-            nodoMatriz = biblioteca.getNodeByName(seleccion)
-            grafo(nodoMatriz.getNombre(), nodoMatriz.getFilas(), nodoMatriz.getColumnas(), nodoMatriz.getImagen(), "original")
             biblioteca.setImgNodeByName(seleccion, tipo)
             nodoMatriz = biblioteca.getNodeByName(seleccion)
             grafo(nodoMatriz.getNombre(), nodoMatriz.getFilas(), nodoMatriz.getColumnas(), nodoMatriz.getImagen(), "modificada")
-            #print(nodoMatriz.getMatriz().dameMatrizEnFormato())
         else:
             print(" >>> Selección inválida")
     else:
