@@ -54,6 +54,7 @@ opr_cmbx["values"]=["Rot. Horizontal", "Rot. Vertical", "Transpuesta"]
 
 opr_lbl2 = ttk.Label(oprtsn, text="De la imagen ") #Crea un label
 opr_cmbx2 = ttk.Combobox(oprtsn, state="readonly")
+
 def muestraOriginal():
     sel2 = opr_cmbx2.get()
     if sel2:
@@ -65,17 +66,20 @@ def muestraOriginal():
         global panel1
         panel1.configure(image=img3)
         panel1.image=img3
-opr_btn2 = ttk.Button(oprtsn, text = "Muestra Matriz", width=13, command=muestraOriginal)
+
+opr_btn2 = ttk.Button(oprtsn, text = "Mostrar Matriz", width=15, command=muestraOriginal)
+
 def visualizar():
     sel1 = opr_cmbx.get()
     sel2 = opr_cmbx2.get()
     if sel1 and sel2:
+        manejador.generaImagenO(sel2)
         if sel1 == "Rot. Horizontal":
-            manejador.generaImagen(sel2,"h")
+            manejador.generaImagenMod(sel2,"h")
         elif sel1 == "Rot. Vertical":
-            manejador.generaImagen(sel2,"v")
+            manejador.generaImagenMod(sel2,"v")
         else:
-            manejador.generaImagen(sel2,"t")
+            manejador.generaImagenMod(sel2,"t")
         #print("Operacion:", sel1, " sobre la img:", sel2)
         img3 = tk.PhotoImage(file="PYTHON\\2021_1S\\IPC2_Proyecto2_201709020\\img_original-grafo.png")
         img4 = tk.PhotoImage(file="PYTHON\\2021_1S\\IPC2_Proyecto2_201709020\\img_modificada-grafo.png")
@@ -95,7 +99,8 @@ def visualizar():
         defaultOpEd()
     else:
         print("Faltan datos")
-opr_btn = ttk.Button(oprtsn, text = "Realizar Operación", width=13, command=visualizar)
+
+opr_btn = ttk.Button(oprtsn, text = "Realizar Operación", width=18, command=visualizar)
 
 #OPERACIONES DE EDICIÓN--------------------------------------------------------------------------------------------
 opredit = ttk.Frame(tabs)
@@ -246,6 +251,8 @@ opredit_cmbx2.bind("<<ComboboxSelected>>", habilitaEntradas)
 
 def habilitaEdit(event):
     # print(opredit_cmbx.get())
+    defaultOpEd1()
+    defaultOpEd2()
     defaultOpEd()
     opredit_cmbx2["state"]="readonly"
 
@@ -253,6 +260,22 @@ opredit_lbl = ttk.Label(opredit, text="Imagen:") #Crea un label
 opredit_cmbx = ttk.Combobox(opredit,  width=10, state="readonly")
 opredit_cmbx.bind("<<ComboboxSelected>>", habilitaEdit)
 # opredit_cmbx["values"]=["Rot. Horizontal", "Rot. Vertical", "Transpuesta"]
+
+def visualizarOE():
+    sel1 = opredit_cmbx.get()
+    if sel1:
+        img3 = tk.PhotoImage(file="PYTHON\\2021_1S\\IPC2_Proyecto2_201709020\\img_original-grafo.png")
+        img4 = tk.PhotoImage(file="PYTHON\\2021_1S\\IPC2_Proyecto2_201709020\\img_modificada-grafo.png")
+        reduc = dameReduccion(img3.height(),img3.width())
+        img3 = img3.subsample(reduc,reduc)
+        img4 = img4.subsample(reduc,reduc)
+        global panel1, panel2
+        panel1.configure(image=img3)
+        panel2.configure(image=img4)
+        panel1.image=img3
+        panel2.image=img4
+    else:
+        print("Faltan datos")
 
 def editaImagen():                  #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     modoEdicion = opredit_cmbx2.get()
@@ -265,28 +288,32 @@ def editaImagen():                  #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         sel6 = opredit_cmbx6.get()#C2
         if modoEdicion == "Limpiar área":
             if sel3 and sel4 and sel5 and sel6:
-                # (sel1, sel2,sel3, sel4, sel5, sel6)
-                print("Img:",sel1, " Oprc:", sel2, " F_i:", sel3, " F_f:", sel4, " C_i:", sel5, " C_f:", sel6)
+                manejador.generaImagenO(sel1)
+                manejador.operationEdit(sel1, sel2, [int(sel3), int(sel4), int(sel5), int(sel6)])
+                visualizarOE()
         elif modoEdicion == "Linea Horiz.":
             if sel3 and sel5 and sel6:
-                # (sel1, sel2, sel3, sel5, sel6)
-                print("Img:",sel1, " Oprc:", sel2, " F:", sel3, " C_i:", sel5, " C_f:", sel6)
+                manejador.generaImagenO(sel1)
+                manejador.operationEdit(sel1, sel2, [int(sel3), int(sel5), int(sel6)])
+                visualizarOE()
         elif modoEdicion == "Linea Vert.":
             if sel3 and sel4 and sel5:
-                # (sel1, sel2, sel3, sel4, sel5)
-                print("Img:",sel1, " Oprc:", sel2, " F_i:", sel3, " F_f:", sel4, " C:", sel5)
+                manejador.generaImagenO(sel1)
+                manejador.operationEdit(sel1, sel2, [int(sel3), int(sel4), int(sel5)])
+                visualizarOE()
         elif modoEdicion == "Rectángulo":
             if sel3 and sel4 and sel5 and sel6:
-                # (sel1, sel2, sel3, sel4, sel5, sel6)
-                print("Img:",sel1, " Oprc:", sel2, " F:", sel3, " Alt:", sel4, " C:", sel5, " Anch:", sel6)
+                manejador.generaImagenO(sel1)
+                manejador.operationEdit(sel1, sel2, [int(sel3), int(sel4), int(sel5), int(sel6)])
+                visualizarOE()
         elif modoEdicion == "Triángulo":
             if sel3 and sel5 and sel6:
-                # (sel1, sel2, sel3, sel5, sel6)
-                print("Img:",sel1, " Oprc:", sel2, " F:", sel3, " C:", sel5, " Tam:", sel6)
-
+                manejador.generaImagenO(sel1)
+                manejador.operationEdit(sel1, sel2, [int(sel3), int(sel5), int(sel6)])
+                visualizarOE()
 
 opredit_btn2 = ttk.Button(opredit, text = "Recargar", width=13, command=None, state=tk.DISABLED)
-opredit_btn = ttk.Button(opredit, text = "Realizar Edición", width=13, command=editaImagen)
+opredit_btn = ttk.Button(opredit, text = "Realizar Edición", width=15, command=editaImagen)
 
 def defaultOpEd1():
     opredit_cmbx2.set("")
