@@ -18,6 +18,11 @@ def listaImagenes():
     global biblioteca
     return biblioteca.getNombres()
 
+def tamanioImagen(nombre):
+    nodoMatriz = biblioteca.getNodeByName(nombre)
+    dimensiones = [nodoMatriz.getFilas(), nodoMatriz.getColumnas()]
+    return dimensiones
+
 def cargarArchivo(ruta):
     global biblioteca
     if biblioteca:
@@ -47,6 +52,17 @@ def generaImagen(seleccion, tipo):
             nodoMatriz = biblioteca.getNodeByName(seleccion)
             grafo(nodoMatriz.getNombre(), nodoMatriz.getFilas(), nodoMatriz.getColumnas(), nodoMatriz.getImagen(), "modificada")
             #print(nodoMatriz.getMatriz().dameMatrizEnFormato())
+        else:
+            print(" >>> Selección inválida")
+    else:
+        print(" >>> Aviso: Debes elegir una opción")
+
+def generaImagenO(seleccion):
+    global biblioteca
+    if seleccion:
+        if biblioteca.existeNombre(seleccion):
+            nodoMatriz = biblioteca.getNodeByName(seleccion)
+            grafo(nodoMatriz.getNombre(), nodoMatriz.getFilas(), nodoMatriz.getColumnas(), nodoMatriz.getImagen(), "original")
         else:
             print(" >>> Selección inválida")
     else:
