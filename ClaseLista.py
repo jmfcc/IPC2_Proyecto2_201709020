@@ -46,7 +46,6 @@ class NodoMultidireccional():
         self.inferior = self.anterior
         self.anterior = apuntadorTemporal
 
-
 class imagen(): #Lista Ortogonal
 
     def __init__(self):
@@ -150,6 +149,132 @@ class imagen(): #Lista Ortogonal
             while self.inicio.getSuperior() != None:
                 self.inicio = self.inicio.getSuperior()
 
+    def limpiaArea(self, f_ini, f_fin, c_ini, c_fin):
+        aux = self.inicio
+        contF = 1
+        contC = 1
+        #Ubicarse en las posiciones iniciales
+        while contF < f_ini:
+            aux = aux.getInferior()
+            contF += 1
+        while contC < c_ini:
+            aux = aux.getSiguiente()
+            contC += 1
+        #Limpiar area
+        while True:
+            if contF == f_fin and contC == c_fin:
+                aux.setCaracter("-")
+                break
+            else:
+                while contC < c_fin:
+                    aux.setCaracter("-")
+                    aux = aux.getSiguiente()
+                    contC += 1
+                aux.setCaracter("-")
+                if contF < f_fin:
+                    while contC > c_ini:
+                        aux = aux.getAnterior()
+                        contC -= 1
+                    aux = aux.getInferior()
+                    contF += 1
+                else:
+                    break
+
+    def lineaHoriz(self, fil, c_ini, c_fin):
+        aux = self.inicio
+        contF = 1
+        contC = 1
+        #Ubicarse en las posiciones iniciales
+        while contF < fil:
+            aux = aux.getInferior()
+            contF += 1
+        while contC < c_ini:
+            aux = aux.getSiguiente()
+            contC += 1
+        #Recorrer columnas
+        while contC < c_fin:
+            aux.setCaracter("*")
+            aux = aux.getSiguiente()
+            contC += 1
+        aux.setCaracter("*")
+
+    def lineaVerti(self, f_ini, f_fin, col):
+        aux = self.inicio
+        contF = 1
+        contC = 1
+        #Ubicarse en las posiciones iniciales
+        while contF < f_ini:
+            aux = aux.getInferior()
+            contF += 1
+        while contC < col:
+            aux = aux.getSiguiente()
+            contC += 1
+        #Recorrer columnas
+        while contF < f_fin:
+            aux.setCaracter("*")
+            aux = aux.getInferior()
+            contF += 1
+        aux.setCaracter("*")
+
+    def rectangulo(self, f_ini, altr, c_ini, anch):
+        aux = self.inicio
+        contF = 1
+        contC = 1
+        #Ubicarse en las posiciones iniciales
+        while contF < f_ini:
+            aux = aux.getInferior()
+            contF += 1
+        while contC < c_ini:
+            aux = aux.getSiguiente()
+            contC += 1
+        #Recorrer columnas
+        while contC < c_ini+anch-1:
+            aux.setCaracter("*")
+            aux = aux.getSiguiente()
+            contC += 1
+        while contF < f_ini+altr-1:
+            aux.setCaracter("*")
+            aux = aux.getInferior()
+            contF += 1
+        while contC > c_ini:
+            aux.setCaracter("*")
+            aux = aux.getAnterior()
+            contC -= 1
+        while contF > f_ini:
+            aux.setCaracter("*")
+            aux = aux.getSuperior()
+            contF -= 1
+        aux.setCaracter("*")
+
+    def triangulo(self, fil, col, tam):
+        aux = self.inicio
+        contF = 1
+        contC = 1
+        #Ubicarse en las posiciones iniciales
+        while contF < fil:
+            aux = aux.getInferior()
+            contF += 1
+        while contC < col:
+            aux = aux.getSiguiente()
+            contC += 1
+        #Recorrer columnas
+        while contF < fil+tam-1:
+            aux.setCaracter("*")
+            aux = aux.getInferior()
+            contF += 1
+        while contC < col+tam-1:
+            aux.setCaracter("*")
+            aux = aux.getSiguiente()
+            contC += 1
+        aux.setCaracter("*")
+        if tam > 2:
+            repeat = tam - 2
+            contRep = 1
+            while contRep <= repeat:
+                aux = aux.getAnterior().getSuperior()
+                aux.setCaracter("*")
+                contRep += 1 
+
 
 class NodoImagen():
 
@@ -186,6 +311,7 @@ class NodoImagen():
         tmp = self.filas
         self.filas = self.columnas
         self.columnas = tmp
+
 class ListaImagenes():
 
     def __init__(self):
