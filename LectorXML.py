@@ -78,8 +78,8 @@ def leerxml(ruta, nArchivo):
                         print(" >>> Imagen:", nombre, " almacenada correctamente")
                 except:
                     print(" >>> Error: Se ha detectado un valor no numérico en el atributo tamaño")
-    time.sleep(1)
-    return
+    time.sleep(0.4)
+    # return
 
 def validaNombre(nombre):
     lista = manejador.getLista()
