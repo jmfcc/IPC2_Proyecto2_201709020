@@ -20,7 +20,7 @@ def escrituranorm(log, nombre):
 
 def mimetodo(di):
     try:
-        time.sleep(2)
+        time.sleep(1)
         system (di)
         print(" >>> Grafo generado exitosamente...")
     except:
