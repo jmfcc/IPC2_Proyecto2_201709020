@@ -1,5 +1,5 @@
 from os import path
-from ClaseLista import ListaImagenes, NodoImagen
+from ClaseLista import ListaImagenes, NodoImagen, imagen
 from generarGrafo import grafo
 from LectorXML import leerxml
 
@@ -14,9 +14,37 @@ def agregaImagen(nombre, filas, columnas, imagen):
     global biblioteca
     biblioteca.agregaImagen(nombre, filas, columnas, imagen)
 
-def listaImagenes():
+def union(nombre1, nombre2):
     global biblioteca
-    return biblioteca.getNombres()
+    img1 = biblioteca.getNodeByName(nombre1)
+    img2 = biblioteca.getNodeByName(nombre2)
+    if img1.getFilas() == img2.getFilas() and img1.getColumnas() == img2.getColumnas():
+        aux1 = img1.getImagen().getInicio()
+        aux2 = img2.getImagen().getInicio()
+        newImg = imagen()
+        nuevaFila = False
+        while True:
+            if aux1.getCaracter() == "*" or aux2.getCaracter() == "*":
+                newImg.agregaNodo("*",nuevaFila)
+            else:
+                newImg.agregaNodo("-",nuevaFila)
+            nuevaFila = False
+            if aux1.getSiguiente() != None:
+                aux1 = aux1.getSiguiente()
+                aux2 = aux2.getSiguiente()
+            else:
+                nuevaFila = True
+                if aux1.getInferior() != None:
+                    while aux1.getAnterior() != None:
+                        aux1 = aux1.getAnterior()
+                        aux2 = aux2.getAnterior()
+                    aux1 = aux1.getInferior()
+                    aux2 = aux2.getInferior()
+                else:
+                    break
+        newImg.muestraLista()
+    else:
+        pass
 
 def operationEdit(nombre, tipo, params):
     global biblioteca

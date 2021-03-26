@@ -16,12 +16,16 @@ def dameReduccion(dim1, dim2):
     if de1 >= de2:
         if (float(de1)+0.50) >= dd1:
         # if float(de1) >= dd1:
+            if de1 == 0:
+                de1 += 1
             return de1
         else:
             return de1+1
     else:
         if (float(de2)+0.50) >= dd2:
         # if float(de2) >= dd2:
+            if de2 == 0:
+                de2 += 1
             return de2
         else:
             return de2+1
@@ -333,6 +337,38 @@ def defaultOpEd():
     opredit_cmbx6.set("")
     opredit_cmbx6["state"]=tk.DISABLED
 
+#OPERACIONES LOGICAS --------------------------------------------------------------------------------------------
+oprlog = ttk.Frame(tabs)
+#elementos
+oprlog_lbl3 = ttk.Label(oprlog, text="Imagen 2:") #Crea un label
+oprlog_cmbx3 = ttk.Combobox(oprlog, state="readonly")
+
+oprlog_lbl = ttk.Label(oprlog, text="Operación:") #Crea un label
+oprlog_cmbx = ttk.Combobox(oprlog, state="readonly")
+oprlog_cmbx["values"]=["Unión", "Intersección", "..."]
+
+def creaListaImg(event):
+    nuevaLista = list(oprlog_cmbx2["values"])
+    seleccion = oprlog_cmbx2.get()
+    nuevaLista.remove(seleccion)
+    oprlog_cmbx3["values"]=nuevaLista
+    oprlog_cmbx3.set("")
+
+oprlog_lbl2 = ttk.Label(oprlog, text="Imagen 1:") #Crea un label
+oprlog_cmbx2 = ttk.Combobox(oprlog, state="readonly")
+oprlog_cmbx2.bind("<<ComboboxSelected>>", creaListaImg)
+
+def operacionLogica():
+    sel1 = oprlog_cmbx2.get()
+    sel2 = oprlog_cmbx3.get()
+    opr_log = oprlog_cmbx.get()
+    if sel1 and sel2 and opr_log:
+        manejador.union(sel1, sel2)
+
+oprlog_btn2 = ttk.Button(oprlog, text = "Mostrar Matriz", width=15, command=None)
+oprlog_btn = ttk.Button(oprlog, text = "Realizar Operación", width=18, command=operacionLogica)
+
+
 #CARGAR ARCHIVO -------------------------------------------------------------------------------------------
 load = ttk.Frame(tabs)
 #elementos
@@ -353,17 +389,19 @@ def cargarArchivo():
         ca_txt.delete(0, tk.END)
         ca_txt.insert(0, str(file))
         manejador.cargarArchivo(file)
-        opr_cmbx2["values"]=manejador.listaImagenes()
+        opr_cmbx2["values"]=manejador.getLista().getNombres()
         opr_cmbx.set("")
         opr_cmbx2.set("")
-        opredit_cmbx["values"]=manejador.listaImagenes()
+        opredit_cmbx["values"]=manejador.getLista().getNombres()
         opredit_cmbx.set("")
+        oprlog_cmbx2["values"]=manejador.getLista().getNombres()
+        oprlog_cmbx2.set("")
         #LimpiezaPestañas
         defaultOpEd1()
         defaultOpEd2()
         defaultOpEd()
         clearPanels()
-        # opr_cmbx2.values=manejador.listaImagenes()
+        # opr_cmbx2.values=manejador.getLista().getNombres()
         # print("archivo", file)
 
 ca_btn = ttk.Button(load, text = "Abrir Archivo", width=13, command=cargarArchivo)
@@ -372,6 +410,7 @@ ca_btn = ttk.Button(load, text = "Abrir Archivo", width=13, command=cargarArchiv
 tabs.add(load, text="Cargar Archivo", padding=10)
 tabs.add(oprtsn, text="Operaciones Básicas", padding=10)
 tabs.add(opredit, text="Operaciones de Edición", padding=10)
+tabs.add(oprlog, text="Operaciones Lógicas", padding=10)
 
 #Añadiendo los elementos a los paneles de las pestañas ---------------------------------------------------
 ca_lbl.pack(side = tk.LEFT, padx=10, pady=5)
@@ -397,6 +436,14 @@ opredit_lbl6.pack(side = tk.LEFT, padx=5, pady=5)
 opredit_cmbx6.pack(side = tk.LEFT, padx=5, pady=5)
 opredit_btn.pack(side = tk.LEFT, padx=5, pady=5)
 opredit_btn2.pack(side = tk.LEFT, padx=5, pady=5)
+oprlog_lbl2.pack(side = tk.LEFT, padx=10, pady=5)
+oprlog_cmbx2.pack(side = tk.LEFT, padx=10, pady=5)
+oprlog_lbl.pack(side = tk.LEFT, padx=10, pady=5)
+oprlog_cmbx.pack(side = tk.LEFT, padx=10, pady=5)
+oprlog_lbl3.pack(side = tk.LEFT, padx=10, pady=5)
+oprlog_cmbx3.pack(side = tk.LEFT, padx=10, pady=5)
+oprlog_btn.pack(side = tk.LEFT, padx=10, pady=5)
+oprlog_btn2.pack(side = tk.LEFT, padx=10, pady=5)
 
 tabs.pack(fill=tk.X)
 
