@@ -280,6 +280,22 @@ class imagen(): #Lista Ortogonal
                 aux.setCaracter("*")
                 contRep += 1 
 
+    def cuentaLlenos(self):
+        aux = self.inicio
+        cLlenos = 0
+        while True:
+            if aux.getCaracter() == "*":
+                cLlenos += 1
+            if aux.getSiguiente() != None:
+                aux = aux.getSiguiente()
+            else:
+                if aux.getInferior() != None:
+                    while aux.getAnterior() != None:
+                        aux = aux.getAnterior()
+                    aux = aux.getInferior()
+                else:
+                    break
+        return cLlenos
 
 class NodoImagen():
 
