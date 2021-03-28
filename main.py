@@ -108,6 +108,7 @@ def visualizar():
         defaultOpEd1()
         defaultOpEd2()
         defaultOpEd()
+        opLogicClear()
     else:
         print("Faltan datos")
 
@@ -369,10 +370,48 @@ def creaListaImg(event):
         oprlog_cmbx["state"]=tk.DISABLED
         oprlog_cmbx3["state"]=tk.DISABLED
 
-
 oprlog_lbl2 = ttk.Label(oprlog, text="Imagen 1:") #Crea un label
 oprlog_cmbx2 = ttk.Combobox(oprlog, state="readonly")
 oprlog_cmbx2.bind("<<ComboboxSelected>>", creaListaImg)
+
+imagenOpLog = None
+entradaNV = None
+textLblOpLog = ""
+def guardaImagenOpLog():
+    global imagenOpLog, entradaNV
+    nombreOpLog = entradaNV.get()
+    if imagenOpLog != None and nombreOpLog:
+        manejador.agregaImagenOpLog(nombreOpLog, imagenOpLog.getFilas(), imagenOpLog.getColumnas(), imagenOpLog.getImagen())
+        print("se almacena con el nombre", nombreOpLog)
+        actualizaListas()
+        opLogicClear()
+    else:
+        print("No hay nombre a almacenar")
+
+def creaNuevaVentana():
+    global entradaNV, textLblOpLog
+    nuevaVentana = tk.Toplevel(ventana)
+    nuevaVentana.title("Operación Logica entre Imágenes")
+    nuevaVentana.geometry('590x585')
+    pan_New2 = ttk.Frame(nuevaVentana)
+    lblNV = ttk.Label(pan_New2, text="Nombre de matriz")
+    entradaNV = ttk.Entry(pan_New2)
+    buttonNV = ttk.Button(pan_New2, text="Guardar Imagen", command= guardaImagenOpLog)
+    pan_New = ttk.Frame(nuevaVentana)
+    img = tk.PhotoImage(file= ruta+"\\src\\imgs\\img_opLogic-grafo.png")
+    reduc = dameReduccion(img.height(),img.width())
+    img = img.subsample(reduc,reduc)
+    panelN = tk.Label(pan_New, image=img, width = 575, height = 530, background="gray")
+    infoN = tk.Label(pan_New, text=textLblOpLog, background="green")
+    panelN.pack(side=tk.TOP)
+    infoN.pack(side=tk.BOTTOM, fill = tk.BOTH, expand=True)
+    lblNV.pack(side=tk.LEFT)
+    entradaNV.pack(side=tk.LEFT)
+    buttonNV.pack(side=tk.LEFT)
+    pan_New.pack(side=tk.TOP)
+    pan_New2.pack(side=tk.BOTTOM)
+    nuevaVentana.grab_set()
+    ventana.wait_window(nuevaVentana)
 
 def visualizarOriginalesLogic():
     ruta = getSource()
@@ -386,27 +425,37 @@ def visualizarOriginalesLogic():
     panel2.configure(image=img4)
     panel1.image=img3
     panel2.image=img4
+    creaNuevaVentana()
 
 def operacionLogica():
     sel1 = oprlog_cmbx2.get()
     sel2 = oprlog_cmbx3.get()
     opr_log = oprlog_cmbx.get()
     if sel1 and sel2 and opr_log:
+        global textLblOpLog
+        textLblOpLog = sel1 + " " + opr_log + " " + sel2
         manejador.generaImagenO(sel1)
         manejador.generaImagenO2(sel2)
+        global imagenOpLog
         if opr_log == "Unión":
-            manejador.union(sel1, sel2)
+            imagenOpLog = manejador.union(sel1, sel2)
         elif opr_log == "Intersección":
-            manejador.interseccion(sel1, sel2)
+            imagenOpLog = manejador.interseccion(sel1, sel2)
         elif opr_log == "Diferencia":
-            manejador.diferencia(sel1, sel2)
+            imagenOpLog = manejador.diferencia(sel1, sel2)
         elif opr_log == "Diferencia Simétrica":
-            manejador.diferenciaSimetrica(sel1, sel2)
+            imagenOpLog = manejador.diferenciaSimetrica(sel1, sel2)
         visualizarOriginalesLogic()
 
 oprlog_btn2 = ttk.Button(oprlog, text = "Mostrar Matriz", width=15, command=None)
 oprlog_btn = ttk.Button(oprlog, text = "Realizar Operación", width=18, command=operacionLogica)
 
+def opLogicClear():
+    oprlog_cmbx2.set("")
+    oprlog_cmbx.set("")
+    oprlog_cmbx3.set("")
+    oprlog_cmbx["state"]=tk.DISABLED
+    oprlog_cmbx3["state"]=tk.DISABLED
 
 #CARGAR ARCHIVO -------------------------------------------------------------------------------------------
 load = ttk.Frame(tabs)
@@ -423,23 +472,28 @@ def clearPanels():
     panel2.configure(image=img4)
     panel1.image=img3
     panel2.image=img4
+
+def actualizaListas():
+    opr_cmbx2["values"]=manejador.getLista().getNombres()
+    opredit_cmbx["values"]=manejador.getLista().getNombres()
+    oprlog_cmbx2["values"]=manejador.getLista().getNombres()
+    opr_cmbx.set("")
+    opr_cmbx2.set("")
+    opredit_cmbx.set("")
+    oprlog_cmbx2.set("")
+    #LimpiezaPestañas
+    defaultOpEd1()
+    defaultOpEd2()
+    defaultOpEd()
+
 def cargarArchivo():
     file = filedialog.askopenfilename(title="Selecciona un archivo", filetypes=[("xml files", "*.xml")])
     if file:
         ca_txt.delete(0, tk.END)
         ca_txt.insert(0, str(file))
         manejador.cargarArchivo(file)
-        opr_cmbx2["values"]=manejador.getLista().getNombres()
-        opr_cmbx.set("")
-        opr_cmbx2.set("")
-        opredit_cmbx["values"]=manejador.getLista().getNombres()
-        opredit_cmbx.set("")
-        oprlog_cmbx2["values"]=manejador.getLista().getNombres()
-        oprlog_cmbx2.set("")
-        #LimpiezaPestañas
-        defaultOpEd1()
-        defaultOpEd2()
-        defaultOpEd()
+        actualizaListas()
+        opLogicClear()
         clearPanels()
         # opr_cmbx2.values=manejador.getLista().getNombres()
         # print("archivo", file)
