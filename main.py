@@ -3,6 +3,7 @@ from tkinter import filedialog
 import tkinter as tk
 from os import path
 from tkinter import ttk
+from tkinter import messagebox
 
 def getSource():
     ruta = path.dirname(path.abspath(__file__)) #Obtiene la ruta del script en ejecución
@@ -504,7 +505,11 @@ ca_btn = ttk.Button(load, text = "Abrir Archivo", width=13, command=cargarArchiv
 info = ttk.Frame(tabs)
 #elementos
 
-info_btn1 = ttk.Button(info, text="Información del Estudiante")
+def infoEstudiante():
+    mensaje= "Jaime Efraín Chiroy Chavez\n201709020\nIPC 2"
+    messagebox.showinfo(message=mensaje, title="Información del estudiante")
+
+info_btn1 = ttk.Button(info, text="Información del Estudiante", command=infoEstudiante)
 
 def docum():
     manejador.openDocs(getSource())
@@ -512,8 +517,7 @@ def docum():
 info_btn2 = ttk.Button(info, text="Abrir Documentación", command=docum)
 
 def muestraLogs():
-    for logs in manejador.logsReport:
-        print(logs)
+    manejador.generaReporte()
 
 info_btn3 = ttk.Button(info, text="Reporte HTML", command=muestraLogs)
 
