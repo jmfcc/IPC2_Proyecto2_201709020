@@ -28,7 +28,7 @@ def mimetodo(di):
     
 def grafo(nombreM, filas, columnas, matriz, tipo):
     ruta = getsource()
-    nombre = ruta + "\\img_" + tipo
+    nombre = ruta + "\\src\\imgs\\img_" + tipo
     file = open(nombre + ".dot", "w")
     file.close()
     
