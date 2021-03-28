@@ -6,6 +6,7 @@ from datetime import date
 from datetime import datetime
 from os import system
 from time import sleep
+from reporteHtml import reportar
 
 biblioteca = ListaImagenes()
 logsReport = []
@@ -213,10 +214,12 @@ def tamanioImagen(nombre):
     return dimensiones
 
 def cargarArchivo(ruta):
-    global biblioteca
+    global biblioteca, logsReport
     if biblioteca:
         biblioteca = None
         biblioteca = ListaImagenes()
+    if logsReport:
+        logsReport.clear()
     #Abrir un archvo
     ph, fh = path.split(ruta)
     nombre, extension = path.splitext(fh)
@@ -285,3 +288,6 @@ def openDocs(ruta):
         system (di)
     except:
         print("Error al abrir documentación")
+
+def generaReporte():
+    reportar(logsReport)
