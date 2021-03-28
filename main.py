@@ -1,11 +1,12 @@
 import manejador
 from tkinter import filedialog
 import tkinter as tk
+from os import path
 from tkinter import ttk
 
-# manejador.cargarArchivo("PYTHON\\2021_1S\\IPC2_Proyecto2_201709020\\entrada.xml")
-# manejador.generaImagen()
-# manejador.generaImagen()
+def getSource():
+    ruta = path.dirname(path.abspath(__file__)) #Obtiene la ruta del script en ejecución
+    return ruta
 
 def dameReduccion(dim1, dim2):
     de1 = dim1//530
@@ -39,8 +40,9 @@ tabs = ttk.Notebook(ventana)
 #PANELES
 pan_vista1 = ttk.Frame(ventana)
 pan_vista2 = ttk.Frame(ventana)
-img = tk.PhotoImage(file="PYTHON\\2021_1S\\IPC2_Proyecto2_201709020\\default.png")
-img2 = tk.PhotoImage(file="PYTHON\\2021_1S\\IPC2_Proyecto2_201709020\\default.png")
+ruta = getSource()
+img = tk.PhotoImage(file= ruta+"\\src\\default\\default1.png")
+img2 = tk.PhotoImage(file=ruta+"\\src\\default\\default2.png")
 # img = img.subsample(2,2)
 # img2 = img2.subsample(2,2)
 panel1 = tk.Label(pan_vista1, image=img, width = 575, height = 530, background="gray")
@@ -63,13 +65,17 @@ def muestraOriginal():
     sel2 = opr_cmbx2.get()
     if sel2:
         manejador.generaImagenO(sel2)
-        img3 = tk.PhotoImage(file="PYTHON\\2021_1S\\IPC2_Proyecto2_201709020\\img_original-grafo.png")
+        ruta = getSource()
+        img3 = tk.PhotoImage(file= ruta+"\\src\\imgs\\img_original-grafo.png")
+        img4 = tk.PhotoImage(file= ruta+"\\src\\default\\default2.png")
         reduc = dameReduccion(img3.height(),img3.width())
         #print("REDUCCION ----------------------------------", reduc)
         img3 = img3.subsample(reduc,reduc)
-        global panel1
+        global panel1, panel2
         panel1.configure(image=img3)
         panel1.image=img3
+        panel2.configure(image=img4)
+        panel2.image=img4
 
 opr_btn2 = ttk.Button(oprtsn, text = "Mostrar Matriz", width=15, command=muestraOriginal)
 
@@ -85,8 +91,9 @@ def visualizar():
         else:
             manejador.generaImagenMod(sel2,"t")
         #print("Operacion:", sel1, " sobre la img:", sel2)
-        img3 = tk.PhotoImage(file="PYTHON\\2021_1S\\IPC2_Proyecto2_201709020\\img_original-grafo.png")
-        img4 = tk.PhotoImage(file="PYTHON\\2021_1S\\IPC2_Proyecto2_201709020\\img_modificada-grafo.png")
+        ruta = getSource()
+        img3 = tk.PhotoImage(file= ruta+"\\src\\imgs\\img_original-grafo.png")
+        img4 = tk.PhotoImage(file= ruta+"\\src\\imgs\\img_modificada-grafo.png")
         reduc = dameReduccion(img3.height(),img3.width())
         #print("REDUCCION ----------------------------------", reduc)
         img3 = img3.subsample(reduc,reduc)
@@ -268,8 +275,9 @@ opredit_cmbx.bind("<<ComboboxSelected>>", habilitaEdit)
 def visualizarOE():
     sel1 = opredit_cmbx.get()
     if sel1:
-        img3 = tk.PhotoImage(file="PYTHON\\2021_1S\\IPC2_Proyecto2_201709020\\img_original-grafo.png")
-        img4 = tk.PhotoImage(file="PYTHON\\2021_1S\\IPC2_Proyecto2_201709020\\img_modificada-grafo.png")
+        ruta = getSource()
+        img3 = tk.PhotoImage(file= ruta+"\\src\\imgs\\img_original-grafo.png")
+        img4 = tk.PhotoImage(file= ruta+"\\src\\imgs\\img_modificada-grafo.png")
         reduc = dameReduccion(img3.height(),img3.width())
         img3 = img3.subsample(reduc,reduc)
         img4 = img4.subsample(reduc,reduc)
@@ -341,29 +349,60 @@ def defaultOpEd():
 oprlog = ttk.Frame(tabs)
 #elementos
 oprlog_lbl3 = ttk.Label(oprlog, text="Imagen 2:") #Crea un label
-oprlog_cmbx3 = ttk.Combobox(oprlog, state="readonly")
+oprlog_cmbx3 = ttk.Combobox(oprlog, state=tk.DISABLED)
 
 oprlog_lbl = ttk.Label(oprlog, text="Operación:") #Crea un label
-oprlog_cmbx = ttk.Combobox(oprlog, state="readonly")
-oprlog_cmbx["values"]=["Unión", "Intersección", "..."]
+oprlog_cmbx = ttk.Combobox(oprlog, state=tk.DISABLED)
+oprlog_cmbx["values"]=["Unión", "Intersección", "Diferencia", "Diferencia Simétrica"]
 
 def creaListaImg(event):
-    nuevaLista = list(oprlog_cmbx2["values"])
     seleccion = oprlog_cmbx2.get()
+    nuevaLista = manejador.getLista().filtroDimensiones(seleccion)
     nuevaLista.remove(seleccion)
-    oprlog_cmbx3["values"]=nuevaLista
     oprlog_cmbx3.set("")
+    oprlog_cmbx.set("")
+    if nuevaLista:
+        oprlog_cmbx3["values"]=nuevaLista
+        oprlog_cmbx["state"]="readonly"
+        oprlog_cmbx3["state"]="readonly"
+    else:
+        oprlog_cmbx["state"]=tk.DISABLED
+        oprlog_cmbx3["state"]=tk.DISABLED
+
 
 oprlog_lbl2 = ttk.Label(oprlog, text="Imagen 1:") #Crea un label
 oprlog_cmbx2 = ttk.Combobox(oprlog, state="readonly")
 oprlog_cmbx2.bind("<<ComboboxSelected>>", creaListaImg)
+
+def visualizarOriginalesLogic():
+    ruta = getSource()
+    img3 = tk.PhotoImage(file= ruta+"\\src\\imgs\\img_original-grafo.png")
+    img4 = tk.PhotoImage(file= ruta+"\\src\\imgs\\img_original2-grafo.png")
+    reduc = dameReduccion(img3.height(),img3.width())
+    img3 = img3.subsample(reduc,reduc)
+    img4 = img4.subsample(reduc,reduc)
+    global panel1, panel2
+    panel1.configure(image=img3)
+    panel2.configure(image=img4)
+    panel1.image=img3
+    panel2.image=img4
 
 def operacionLogica():
     sel1 = oprlog_cmbx2.get()
     sel2 = oprlog_cmbx3.get()
     opr_log = oprlog_cmbx.get()
     if sel1 and sel2 and opr_log:
-        manejador.union(sel1, sel2)
+        manejador.generaImagenO(sel1)
+        manejador.generaImagenO2(sel2)
+        if opr_log == "Unión":
+            manejador.union(sel1, sel2)
+        elif opr_log == "Intersección":
+            manejador.interseccion(sel1, sel2)
+        elif opr_log == "Diferencia":
+            manejador.diferencia(sel1, sel2)
+        elif opr_log == "Diferencia Simétrica":
+            manejador.diferenciaSimetrica(sel1, sel2)
+        visualizarOriginalesLogic()
 
 oprlog_btn2 = ttk.Button(oprlog, text = "Mostrar Matriz", width=15, command=None)
 oprlog_btn = ttk.Button(oprlog, text = "Realizar Operación", width=18, command=operacionLogica)
@@ -376,8 +415,9 @@ ca_lbl = ttk.Label(load, text="Archivo Cargado:",width=16) #Crea un label
 ca_txt = ttk.Entry(load,width=50)
 ca_txt.insert(0, "No hay ningun archivo cargado...")
 def clearPanels():
-    img3 = tk.PhotoImage(file="PYTHON\\2021_1S\\IPC2_Proyecto2_201709020\\default.png")
-    img4 = tk.PhotoImage(file="PYTHON\\2021_1S\\IPC2_Proyecto2_201709020\\default.png")
+    ruta = getSource()
+    img3 = tk.PhotoImage(file= ruta+"\\src\\default\\default1.png")
+    img4 = tk.PhotoImage(file= ruta+"\\src\\default\\default2.png")
     global panel1, panel2
     panel1.configure(image=img3)
     panel2.configure(image=img4)
@@ -436,14 +476,14 @@ opredit_lbl6.pack(side = tk.LEFT, padx=5, pady=5)
 opredit_cmbx6.pack(side = tk.LEFT, padx=5, pady=5)
 opredit_btn.pack(side = tk.LEFT, padx=5, pady=5)
 opredit_btn2.pack(side = tk.LEFT, padx=5, pady=5)
-oprlog_lbl2.pack(side = tk.LEFT, padx=10, pady=5)
-oprlog_cmbx2.pack(side = tk.LEFT, padx=10, pady=5)
-oprlog_lbl.pack(side = tk.LEFT, padx=10, pady=5)
-oprlog_cmbx.pack(side = tk.LEFT, padx=10, pady=5)
-oprlog_lbl3.pack(side = tk.LEFT, padx=10, pady=5)
-oprlog_cmbx3.pack(side = tk.LEFT, padx=10, pady=5)
-oprlog_btn.pack(side = tk.LEFT, padx=10, pady=5)
-oprlog_btn2.pack(side = tk.LEFT, padx=10, pady=5)
+oprlog_lbl2.pack(side = tk.LEFT, padx=5, pady=5)
+oprlog_cmbx2.pack(side = tk.LEFT, padx=5, pady=5)
+oprlog_lbl.pack(side = tk.LEFT, padx=5, pady=5)
+oprlog_cmbx.pack(side = tk.LEFT, padx=5, pady=5)
+oprlog_lbl3.pack(side = tk.LEFT, padx=5, pady=5)
+oprlog_cmbx3.pack(side = tk.LEFT, padx=5, pady=5)
+oprlog_btn.pack(side = tk.LEFT, padx=5, pady=5)
+oprlog_btn2.pack(side = tk.LEFT, padx=5, pady=5)
 
 tabs.pack(fill=tk.X)
 
