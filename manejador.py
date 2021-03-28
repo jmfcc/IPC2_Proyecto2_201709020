@@ -14,6 +14,15 @@ def agregaImagen(nombre, filas, columnas, imagen):
     global biblioteca
     biblioteca.agregaImagen(nombre, filas, columnas, imagen)
 
+def agregaImagenOpLog(nombre, filas, columnas, imagen):
+    #new = NodoImagen(nombre, filas, columnas, imagen)
+    global biblioteca
+    if biblioteca.existeNombre(nombre):
+        biblioteca.getNodeByName(nombre).setImagen(imagen)
+    else:
+        biblioteca.agregaImagen(nombre, filas, columnas, imagen)
+
+
 def union(nombre1, nombre2):
     global biblioteca
     img1 = biblioteca.getNodeByName(nombre1)
@@ -42,9 +51,10 @@ def union(nombre1, nombre2):
                     aux2 = aux2.getInferior()
                 else:
                     break
-        imgTemporal = NodoImagen(img1.getNombre()+"_U_"+img2.getNombre(), img1.getFilas(), img1.getColumnas(), newImg)
+        imgTemporal = NodoImagen(img1.getNombre()+"-"+img2.getNombre(), img1.getFilas(), img1.getColumnas(), newImg)
         #newImg.muestraLista()
         generaImagenLogic(imgTemporal)
+        return imgTemporal
     else:
         pass
 
@@ -76,9 +86,10 @@ def interseccion(nombre1, nombre2):
                     aux2 = aux2.getInferior()
                 else:
                     break
-        imgTemporal = NodoImagen(img1.getNombre()+"_I_"+img2.getNombre(), img1.getFilas(), img1.getColumnas(), newImg)
+        imgTemporal = NodoImagen(img1.getNombre()+"-"+img2.getNombre(), img1.getFilas(), img1.getColumnas(), newImg)
         #newImg.muestraLista()
         generaImagenLogic(imgTemporal)
+        return imgTemporal
     else:
         pass
 
@@ -110,9 +121,10 @@ def diferencia(nombre1, nombre2):
                     aux2 = aux2.getInferior()
                 else:
                     break
-        imgTemporal = NodoImagen(img1.getNombre()+"_D_"+img2.getNombre(), img1.getFilas(), img1.getColumnas(), newImg)
+        imgTemporal = NodoImagen(img1.getNombre()+"-"+img2.getNombre(), img1.getFilas(), img1.getColumnas(), newImg)
         #newImg.muestraLista()
         generaImagenLogic(imgTemporal)
+        return imgTemporal
     else:
         pass
 
@@ -146,9 +158,10 @@ def diferenciaSimetrica(nombre1, nombre2):
                     aux2 = aux2.getInferior()
                 else:
                     break
-        imgTemporal = NodoImagen(img1.getNombre()+"_DS_"+img2.getNombre(), img1.getFilas(), img1.getColumnas(), newImg)
+        imgTemporal = NodoImagen(img1.getNombre()+"-"+img2.getNombre(), img1.getFilas(), img1.getColumnas(), newImg)
         #newImg.muestraLista()
         generaImagenLogic(imgTemporal)
+        return imgTemporal
     else:
         pass
 
