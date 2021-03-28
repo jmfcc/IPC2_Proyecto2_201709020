@@ -85,11 +85,11 @@ def visualizar():
     if sel1 and sel2:
         manejador.generaImagenO(sel2)
         if sel1 == "Rot. Horizontal":
-            manejador.generaImagenMod(sel2,"h")
+            manejador.generaImagenMod(sel2,"h", sel1)
         elif sel1 == "Rot. Vertical":
-            manejador.generaImagenMod(sel2,"v")
+            manejador.generaImagenMod(sel2,"v", sel1)
         else:
-            manejador.generaImagenMod(sel2,"t")
+            manejador.generaImagenMod(sel2,"t", sel1)
         #print("Operacion:", sel1, " sobre la img:", sel2)
         ruta = getSource()
         img3 = tk.PhotoImage(file= ruta+"\\src\\imgs\\img_original-grafo.png")
@@ -500,11 +500,29 @@ def cargarArchivo():
 
 ca_btn = ttk.Button(load, text = "Abrir Archivo", width=13, command=cargarArchivo)
 
+#INFO ----------------------------------------------------------------------------------------------------
+info = ttk.Frame(tabs)
+#elementos
+
+info_btn1 = ttk.Button(info, text="Información del Estudiante")
+
+def docum():
+    manejador.openDocs(getSource())
+
+info_btn2 = ttk.Button(info, text="Abrir Documentación", command=docum)
+
+def muestraLogs():
+    for logs in manejador.logsReport:
+        print(logs)
+
+info_btn3 = ttk.Button(info, text="Reporte HTML", command=muestraLogs)
+
 #Creando las pestañas ------------------------------------------------------------------------------------
 tabs.add(load, text="Cargar Archivo", padding=10)
 tabs.add(oprtsn, text="Operaciones Básicas", padding=10)
 tabs.add(opredit, text="Operaciones de Edición", padding=10)
 tabs.add(oprlog, text="Operaciones Lógicas", padding=10)
+tabs.add(info, text="Información", padding=10)
 
 #Añadiendo los elementos a los paneles de las pestañas ---------------------------------------------------
 ca_lbl.pack(side = tk.LEFT, padx=10, pady=5)
@@ -538,6 +556,9 @@ oprlog_lbl3.pack(side = tk.LEFT, padx=5, pady=5)
 oprlog_cmbx3.pack(side = tk.LEFT, padx=5, pady=5)
 oprlog_btn.pack(side = tk.LEFT, padx=5, pady=5)
 oprlog_btn2.pack(side = tk.LEFT, padx=5, pady=5)
+info_btn1.pack(side = tk.LEFT, padx=5, pady=5)
+info_btn2.pack(side = tk.LEFT, padx=5, pady=5)
+info_btn3.pack(side = tk.LEFT, padx=5, pady=5)
 
 tabs.pack(fill=tk.X)
 
