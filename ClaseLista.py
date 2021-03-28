@@ -209,7 +209,7 @@ class imagen(): #Lista Ortogonal
         while contC < col:
             aux = aux.getSiguiente()
             contC += 1
-        #Recorrer columnas
+        #Recorrer filas
         while contF < f_fin:
             aux.setCaracter("*")
             aux = aux.getInferior()
@@ -227,19 +227,22 @@ class imagen(): #Lista Ortogonal
         while contC < c_ini:
             aux = aux.getSiguiente()
             contC += 1
-        #Recorrer columnas
+        #Recorrer derecha
         while contC < c_ini+anch-1:
             aux.setCaracter("*")
             aux = aux.getSiguiente()
             contC += 1
+        #Recorrer abajo
         while contF < f_ini+altr-1:
             aux.setCaracter("*")
             aux = aux.getInferior()
             contF += 1
+        #Recorrer atras
         while contC > c_ini:
             aux.setCaracter("*")
             aux = aux.getAnterior()
             contC -= 1
+        #Recorrer arriba
         while contF > f_ini:
             aux.setCaracter("*")
             aux = aux.getSuperior()
@@ -257,16 +260,18 @@ class imagen(): #Lista Ortogonal
         while contC < col:
             aux = aux.getSiguiente()
             contC += 1
-        #Recorrer columnas
+        #Recorrer filas
         while contF < fil+tam-1:
             aux.setCaracter("*")
             aux = aux.getInferior()
             contF += 1
+        #Recorrer coulumnas
         while contC < col+tam-1:
             aux.setCaracter("*")
             aux = aux.getSiguiente()
             contC += 1
         aux.setCaracter("*")
+        #Recorrer en escalera
         if tam > 2:
             repeat = tam - 2
             contRep = 1
@@ -349,15 +354,6 @@ class ListaImagenes():
                     break
             return elem_comboBox
 
-    # def muestraNombres(self):
-    #     aux = self.inicio
-    #     while True:
-    #         print(" >>", aux.getNombre())
-    #         if aux.getSiguiente() != None:
-    #             aux = aux.getSiguiente()
-    #         else:
-    #             break
-
     def existeNombre(self, nombre):
         aux = self.inicio
         while True:
@@ -379,6 +375,22 @@ class ListaImagenes():
             else:
                 break
     
+    def filtroDimensiones(self, nombre):
+        elem_comboBox = []
+        if self.estaVacia():
+            return elem_comboBox
+        else:
+            aux = self.inicio
+            img = self.getNodeByName(nombre)
+            while True:
+                if img.getFilas() == aux.getFilas() and img.getColumnas() == aux.getColumnas():
+                    elem_comboBox.append(aux.getNombre())
+                if aux.getSiguiente() != None:
+                    aux = aux.getSiguiente()
+                else:
+                    break
+            return elem_comboBox
+
     def setImgNodeByName(self, nombre, pos):
         aux = self.inicio
         while True:
