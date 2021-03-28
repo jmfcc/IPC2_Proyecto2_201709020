@@ -56,6 +56,8 @@ def leerxml(ruta, nArchivo):
                     if taBien:
                         img_tmp = imagen()
                         cont = 0
+                        cLlenos = 0
+                        cVacios = 0
                         esNueva = True
                         for char in img:
                             if char == "\n":
@@ -63,9 +65,14 @@ def leerxml(ruta, nArchivo):
                                     pass
                                 else:
                                     esNueva = True
+
                                     cont = 0
                                 #print("Linea")
                             else:
+                                if char == "*":
+                                    cLlenos += 1
+                                elif char == "-":
+                                    cVacios += 1
                                 if esNueva:
                                     cont += 1
                                     img_tmp.agregaNodo(char, esNueva)
@@ -75,6 +82,8 @@ def leerxml(ruta, nArchivo):
                                     img_tmp.agregaNodo(char, esNueva)
                                 cont += 1
                         manejador.agregaImagen(nombre, filas, columnas, img_tmp)
+                        log = "Almacenando matriz: " + nombre + " - Espacios llenos: " + str(cLlenos) + " - Espacios vacíos: " + str(cVacios)
+                        manejador.agregaLog(log)
                         print(" >>> Imagen:", nombre, " almacenada correctamente")
                 except:
                     print(" >>> Error: Se ha detectado un valor no numérico en el atributo tamaño")
