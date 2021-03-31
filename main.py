@@ -62,6 +62,16 @@ opr_cmbx["values"]=["Rot. Horizontal", "Rot. Vertical", "Transpuesta"]
 opr_lbl2 = ttk.Label(oprtsn, text="De la imagen ") #Crea un label
 opr_cmbx2 = ttk.Combobox(oprtsn, state="readonly")
 
+def infoMatriz(nombreImagen):
+    imgNodo = manejador.getLista().getNodeByName(nombreImagen)
+    nFilas = imgNodo.getFilas()
+    nColumnas = imgNodo.getColumnas()
+    cLlenos = imgNodo.getImagen().cuentaLlenos()
+    dimImg = manejador.tamanioImagen(nombreImagen)
+    cVacios = (dimImg[0]*dimImg[1]) - cLlenos
+    mensaje= "- Matriz: " + nombreImagen + "\n- No. Filas: " + str(nFilas) + "\n- No. Columnas: " + str(nColumnas) + "\n- Espacios llenos: " + str(cLlenos) + " \n- Espacios vacíos: " + str(cVacios)
+    messagebox.showinfo(message=mensaje, title="Datos de Imagen")
+
 def muestraOriginal():
     sel2 = opr_cmbx2.get()
     if sel2:
@@ -77,6 +87,7 @@ def muestraOriginal():
         panel1.image=img3
         panel2.configure(image=img4)
         panel2.image=img4
+        infoMatriz(sel2)
 
 opr_btn2 = ttk.Button(oprtsn, text = "Mostrar Matriz", width=15, command=muestraOriginal)
 
