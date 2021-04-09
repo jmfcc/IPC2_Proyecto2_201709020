@@ -65,7 +65,7 @@ def grafo(nombreM, filas, columnas, matriz, tipo):
             escrituranorm(log, nombre)
             init = False
         if aux.getCaracter() == "*":
-            log = "\t\t\t\t<TD> " + aux.getCaracter() + " </TD>"
+            log = "\t\t\t\t<TD BGCOLOR=\"black\"> " + aux.getCaracter() + " </TD>"
         else:
             log = "\t\t\t\t<TD>   </TD>"
         escrituranorm(log, nombre)
